@@ -1,6 +1,17 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, chromium } from '@playwright/test';
 
-test('Login To Naukri And Update Profile', async ({ page }) => {
+test('Login To Naukri And Update Profile', async () => {
+  const browser = await chromium.launch();
+  const context = await browser.newContext();
+
+  // ✅ Set custom headers here
+  await context.setExtraHTTPHeaders({
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+  });
+
+  const page = await context.newPage();
+
+
   const loginButton=page.locator('//a[@id="login_Layer"]')
   const userNameInputBox=page.locator('//input[contains(@placeholder,"Email ID / Username")]')
   const userPasswordInputBox=page.locator('//input[contains(@placeholder,"password")]')
@@ -12,6 +23,7 @@ test('Login To Naukri And Update Profile', async ({ page }) => {
   const basicDetailsMonths=page.locator('//input[@id="exp-months-droopeFor"]')
   const basicDetailsSaveButton=page.locator('//button[@id="saveBasicDetailsBtn"]')
   await page.goto('https://www.naukri.com/');
+  
   await loginButton.click()
   await userNameInputBox.fill('tvssbhagavan2002@gmail.com')
   await userPasswordInputBox.fill('Govindha@18')
